@@ -38,10 +38,7 @@ export class Render3d{
     private _zNear: number = 0.1
     private _theta: number = 90 //angle vision - scale factor
 
-    private _lastTheta: number = 90
-    
     private _aspectRatio: number = 0
-    private _FovRad: number = 0
 
     private _matrixProjection: Matrix4x4 = new Matrix4x4()
     private _matRotation: Matrix4x4 = new Matrix4x4()
@@ -86,7 +83,6 @@ export class Render3d{
             this._isChanged = true
         }
         if(settings.theta &&  settings.theta != this._theta){
-            this._lastTheta = this.theta
             this.theta = settings.theta
         }
         if(this._isChanged){
@@ -147,7 +143,6 @@ export class Render3d{
         if(zFar!==0) this._zFar = zFar;
 
         this._aspectRatio = this._height/ this._width
-        this._FovRad = 1/ (Math.tan(this._theta * 0.5 / 180*Math.PI))
         this.calculatedMatrixProjection()
         this.calculatedMatrixRotation()
         console.log('setPRoj')

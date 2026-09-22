@@ -21,7 +21,6 @@ export class Scene{
     private _moving: GameObject[] = []
     private _collisions: Collision[] = []
     private _toDelete: Delete[] = []
-    private _processing: ObjectGroup = ObjectGroup.STATIC
 
 
     add(obj:GameObject, type: ObjectGroup) {
@@ -37,20 +36,14 @@ export class Scene{
     }
 
     update():void{
-        this._processing = ObjectGroup.STATIC;
         this._statics.forEach(obj => obj.update());
-
-        this._processing = ObjectGroup.MOVING;
         this._moving.forEach(obj => obj.update());
 
         this.processDeleted();
     }
 
     draw(context: CanvasRenderingContext2D) {
-        this._processing = ObjectGroup.STATIC;
         this._statics.forEach(obj => obj.draw(context));
-
-        this._processing = ObjectGroup.MOVING;
         this._moving.forEach(obj => obj.draw(context));
     }
 

@@ -15,7 +15,7 @@ export class Player extends GameObject{
     update(): void {
         this.handleInput()
     }
-    onCollision(obj: GameObject): void {
+    onCollision(_obj: GameObject): void {
         
     }
 

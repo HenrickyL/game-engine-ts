@@ -18,4 +18,132 @@ body{
   align-items: center;
   justify-content: center;
   background-color: #0A0A0A;
+  color: #f3f3f3;
+}
+
+#root{
+  width: 100%;
+  height: 100%;
+}
+
+.vitrine-pagina,
+.palco-pagina{
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.palco-pagina{
+  align-items: center;
+}
+
+.vitrine{
+  width: min(28rem, calc(100% - 3rem));
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4.5rem 0 1.75rem;
+}
+
+.vitrine h1{
+  font-size: 1.85rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.subtitulo{
+  margin-top: 0.4rem;
+  color: #c6c6c6;
+  font-size: 1rem;
+}
+
+.demos{
+  margin-top: 2.75rem;
+}
+
+.demos h2{
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.grupo{
+  margin-top: 1.25rem;
+}
+
+.grupo h3{
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: #b5b5b5;
+  margin-bottom: 0.7rem;
+}
+
+.card{
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  color: #f5f5f5;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  padding: 0.95rem 1.05rem;
+  font: inherit;
+  font-size: 1.05rem;
+  cursor: pointer;
+}
+
+.card:hover{
+  border-color: rgba(255, 255, 255, 0.72);
+}
+
+.rodape{
+  display: flex;
+  gap: 0.9rem;
+  align-items: baseline;
+  color: #bdbdbd;
+  font-size: 0.92rem;
+}
+
+.rodape a{
+  color: #f3f3f3;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.palco{
+  position: relative;
+  width: 800px;
+  height: 600px;
+}
+
+.palco canvas{
+  display: block;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.voltar{
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1;
+  background: rgba(10, 10, 10, 0.55);
+  color: #f3f3f3;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  padding: 0.35rem 0.7rem;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.legenda{
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 1;
+  margin: 0;
+  padding: 0.45rem 0.7rem;
+  list-style: none;
+  background: rgba(10, 10, 10, 0.55);
+  color: #f3f3f3;
+  font-size: 0.85rem;
+  line-height: 1.45;
 }

@@ -16,13 +16,11 @@ export class Input{
     private static _mouseClickUpPosition: Position = Position.Zero
     private static _mouseWheel: number = 0
     private static _lastMouseWheelTime: number = 0
-    private static _timeResetDelay: number = 600
     private static _onPositiveWheel : boolean = false
 
     private static _dragX: number =0
     private static _dragY: number =0
     private static _dragElapse: number = 5
-    private static _lastTimeDrag: number = 0
 
 
     private constructor(){

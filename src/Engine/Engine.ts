@@ -20,6 +20,8 @@ export class Engine{
     private _screenHeight: number = 600
     private _timer : Timer
     private _onPause: boolean = false
+    private _ativa: boolean = false
+    private _frame: number = 0
 
     constructor(isVariableRate = false){
         this._timer = new Timer()
@@ -28,10 +30,18 @@ export class Engine{
 
 
     start(game: IGame){
+        this._ativa = true
         this._graphics = new Graphics(this.screenWidth, this.screenHeight)
         this._game = game
         Input.generate(this._graphics.canvas)
         this.loop()
+    }
+
+    stop(){
+        this._ativa = false
+        cancelAnimationFrame(this._frame)
+        this._frame = 0
+        this._game = undefined
     }
 
     private loop(){
@@ -41,13 +51,16 @@ export class Engine{
         this._game.init(this._graphics)
         this._timer.resetTimer()
 
-        requestAnimationFrame(this._isVariableRate ?
+        this._frame = requestAnimationFrame(this._isVariableRate ?
             this.mainLoopVariable: this.mainLoopConstant)
 
         this._timer.stopTimer()
     }
 
     private mainLoopVariable = (timestamp:number)=>{
+        if(!this._ativa){
+            return
+        }
         const elapsed = timestamp - this._lastTime
         this._lastTime = timestamp
         this._elapsed += elapsed
@@ -58,16 +71,19 @@ export class Engine{
             this._elapsed = 0
         }
         this.mainLoop(elapsed)
-        requestAnimationFrame(this.mainLoopVariable)
+        this._frame = requestAnimationFrame(this.mainLoopVariable)
 
     }
 
     private mainLoopConstant = (timestamp:number)=>{
+        if(!this._ativa){
+            return
+        }
         const currentTime = timestamp || 0
         const elapsed = currentTime - this._lastTime
         this.mainLoop(elapsed)
         this._lastTime = currentTime - (elapsed % this._frameDuration);
-        requestAnimationFrame(this.mainLoopConstant)
+        this._frame = requestAnimationFrame(this.mainLoopConstant)
     }
 
 
