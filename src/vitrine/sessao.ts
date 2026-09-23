@@ -33,7 +33,7 @@ export const catalogo: readonly EntradaDemo[] = [
             "Espaço — trocar a malha",
             "R — restaurar",
             "T — preenchido ou pontos",
-            "D — iluminação",
+            "I — iluminação",
         ],
     },
 ]

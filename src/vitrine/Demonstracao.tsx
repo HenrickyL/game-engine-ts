@@ -91,7 +91,7 @@ export function DemonstracaoAberta({ onVoltar }: { onVoltar: () => void }) {
                 if (Input.keyPress(InputKeys.T)) {
                     isPoint = !isPoint
                 }
-                if (Input.keyPress(InputKeys.D)) {
+                if (Input.keyPress(InputKeys.I)) {
                     iluminado = !iluminado
                     graph.isChanged = true
                 }

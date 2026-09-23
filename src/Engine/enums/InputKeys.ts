@@ -22,5 +22,6 @@ export enum InputKeys {
     R = 'KeyR',
     P = 'KeyP',
     T = 'KeyT',
+    I = 'KeyI',
     B = 'KeyB',
 }
