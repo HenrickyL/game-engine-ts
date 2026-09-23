@@ -68,8 +68,8 @@ export function DemonstracaoAberta({ onVoltar }: { onVoltar: () => void }) {
             graph.isChanged = true
 
             intervalos.push(window.setInterval(() => {
-                const mult = Input.keyDown(InputKeys.ShiftLeft) ? 5 : 1
-                const passo = tick * mult
+                const rapido = Input.keyDown(InputKeys.ShiftLeft) || Input.keyDown(InputKeys.ShiftRight)
+                const passo = tick * (rapido ? 5 : 1)
                 if (Input.keyDown(InputKeys.A)) {
                     x -= passo
                     graph.x = x
@@ -103,10 +103,8 @@ export function DemonstracaoAberta({ onVoltar }: { onVoltar: () => void }) {
                 const roda = Input.consumirRoda()
                 if (roda !== 0) {
                     const proximo = z + roda * passo
-                    if (proximo > 0) {
-                        z = proximo
-                        graph.z = z
-                    }
+                    z = proximo > tick ? proximo : tick
+                    graph.z = z
                 }
             }, 100))
 
