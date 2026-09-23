@@ -26,7 +26,7 @@ type UpdateSettings = {
 type RenderSettings = {
     isColor?: boolean
     isPoint?: boolean
-
+    iluminado?: boolean
 }
 export class Render3d{
     private _graphics: Graphics
@@ -101,17 +101,17 @@ export class Render3d{
         let triangleToDraw = this._lastRender
         if(this._isChanged){
             console.log('Change')
-            const sortedTriangles = this.projectTrianglesAndSort(mesh)
+            const sortedTriangles = this.projectTrianglesAndSort(mesh, settings.iluminado !== false)
             triangleToDraw = sortedTriangles
             this._lastRender = sortedTriangles
         }
         this.drawTriangles(triangleToDraw, settings)
         this._isChanged = false
     }
-    private projectTrianglesAndSort(mesh: Mesh):Triangle[]{
+    private projectTrianglesAndSort(mesh: Mesh, iluminado: boolean):Triangle[]{
         const trianglesToDraw: Triangle[] = []
         mesh.triangles.forEach(triangle =>{
-            const projectedTriangle = this.projectVertex(triangle)
+            const projectedTriangle = this.projectVertex(triangle, iluminado)
             if(projectedTriangle){
                 trianglesToDraw.push(projectedTriangle)
             }
@@ -168,7 +168,7 @@ export class Render3d{
     }
 
 
-    private projectVertex(triangle: Triangle): Triangle | null{
+    private projectVertex(triangle: Triangle, iluminado: boolean): Triangle | null{
         const triangleTranslated = this.preProjectionCalculation(triangle)
         const normal: Vector = Triangle.normalVector(triangleTranslated)
 
@@ -185,6 +185,9 @@ export class Render3d{
                 return res
             })
             const resultTriangle = new Triangle(result, triangle.color)
+            if(!iluminado){
+                return resultTriangle
+            }
             return this.lightCalculation(resultTriangle, normal)
         }
         return null

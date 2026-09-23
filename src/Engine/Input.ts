@@ -208,6 +208,11 @@ export class Input{
         return Input._mouseWheel
     }
 
+    static zerarArrasto(): void{
+        Input._dragX = 0
+        Input._dragY = 0
+    }
+
     static consumirRoda(): number{
         const valor = Input._mouseWheel
         Input._mouseWheel = 0

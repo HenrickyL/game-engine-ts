@@ -61,9 +61,11 @@ export function DemonstracaoAberta({ onVoltar }: { onVoltar: () => void }) {
             let angleZ = 0
             let angleY = 0
             let isPoint = false
+            let iluminado = true
             let x = 0
             let y = 0
             let z = 2
+            const abertura = { x, y, z, angleX, angleY, angleZ }
             const tick = 0.2
             graph.isChanged = true
 
@@ -89,6 +91,10 @@ export function DemonstracaoAberta({ onVoltar }: { onVoltar: () => void }) {
                 if (Input.keyPress(InputKeys.T)) {
                     isPoint = !isPoint
                 }
+                if (Input.keyPress(InputKeys.D)) {
+                    iluminado = !iluminado
+                    graph.isChanged = true
+                }
                 if (Input.keyPress(InputKeys.Space)) {
                     index = (index + 1) % forms.length
                     mesh = forms[index]
@@ -106,11 +112,24 @@ export function DemonstracaoAberta({ onVoltar }: { onVoltar: () => void }) {
                     z = proximo > tick ? proximo : tick
                     graph.z = z
                 }
+                if (Input.keyPress(InputKeys.R)) {
+                    x = abertura.x
+                    y = abertura.y
+                    z = abertura.z
+                    angleX = abertura.angleX
+                    angleY = abertura.angleY
+                    angleZ = abertura.angleZ
+                    graph.x = x
+                    graph.y = y
+                    graph.z = z
+                    Input.zerarArrasto()
+                    graph.isChanged = true
+                }
             }, 100))
 
             intervalos.push(window.setInterval(() => {
                 graph.update({ angleX, angleZ, angleY })
-                graph.render(mesh, { isPoint })
+                graph.render(mesh, { isPoint, iluminado })
             }, 1000 / 45))
         })()
 

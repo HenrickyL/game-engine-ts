@@ -31,7 +31,9 @@ export const catalogo: readonly EntradaDemo[] = [
             "Roda — aproximar e afastar",
             "Arrastar — girar",
             "Espaço — trocar a malha",
+            "R — restaurar",
             "T — preenchido ou pontos",
+            "D — iluminação",
         ],
     },
 ]
