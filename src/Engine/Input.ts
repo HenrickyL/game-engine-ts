@@ -15,7 +15,6 @@ export class Input{
     private static _mouseClickPosition: Position = Position.Zero
     private static _mouseClickUpPosition: Position = Position.Zero
     private static _mouseWheel: number = 0
-    private static _lastMouseWheelTime: number = 0
     private static _onPositiveWheel : boolean = false
 
     private static _dragX: number =0
@@ -103,21 +102,14 @@ export class Input{
         // Input._dragY = 0
     }
 
-    private static onElapsed(lastTime:number, elapseTime: number):boolean{
-        const currentTime = performance.now() 
-        const elapsed = currentTime - lastTime
-
-        return elapsed > elapseTime
-    }
     private onMouseWheel(event: WheelEvent){
-        if(Input.onElapsed(Input._lastMouseWheelTime, Input._lastMouseWheelTime)){
-            Input._mouseWheel = 0
-        }else{
-            const mouseWheel = event.deltaY
-            Input._onPositiveWheel = mouseWheel>0
-            Input._mouseWheel += Math.round(mouseWheel/150)
+        const mouseWheel = event.deltaY
+        Input._onPositiveWheel = mouseWheel > 0
+        let notches = Math.round(mouseWheel / 150)
+        if(notches === 0 && mouseWheel !== 0){
+            notches = mouseWheel > 0 ? 1 : -1
         }
-        Input._lastMouseWheelTime = performance.now()
+        Input._mouseWheel += notches
     }
 
     private onKeyUp(event: KeyboardEvent){
@@ -214,6 +206,12 @@ export class Input{
 
     static getMouseWheel():number{
         return Input._mouseWheel
+    }
+
+    static consumirRoda(): number{
+        const valor = Input._mouseWheel
+        Input._mouseWheel = 0
+        return valor
     }
 
     static getOnMouseClick():boolean{

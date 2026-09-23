@@ -60,14 +60,33 @@ export function DemonstracaoAberta({ onVoltar }: { onVoltar: () => void }) {
             let angleX = 0
             let angleZ = 0
             let angleY = 0
-            let isColor = false
             let isPoint = false
-            let z = 1
+            let x = 0
+            let y = 0
+            let z = 2
             const tick = 0.2
             graph.isChanged = true
 
             intervalos.push(window.setInterval(() => {
-                if (Input.keyPress(InputKeys.A)) {
+                const mult = Input.keyDown(InputKeys.ShiftLeft) ? 5 : 1
+                const passo = tick * mult
+                if (Input.keyDown(InputKeys.A)) {
+                    x -= passo
+                    graph.x = x
+                }
+                if (Input.keyDown(InputKeys.D)) {
+                    x += passo
+                    graph.x = x
+                }
+                if (Input.keyDown(InputKeys.W)) {
+                    y -= passo
+                    graph.y = y
+                }
+                if (Input.keyDown(InputKeys.S)) {
+                    y += passo
+                    graph.y = y
+                }
+                if (Input.keyPress(InputKeys.T)) {
                     isPoint = !isPoint
                 }
                 if (Input.keyPress(InputKeys.Space)) {
@@ -75,33 +94,25 @@ export function DemonstracaoAberta({ onVoltar }: { onVoltar: () => void }) {
                     mesh = forms[index]
                     graph.isChanged = true
                 }
-                if (Input.keyDown(InputKeys.W)) {
-                    const mult = Input.keyDown(InputKeys.ShiftLeft) ? 5 : 1
-                    z += tick * mult
-                    graph.z = z
-                }
-                if (Input.keyDown(InputKeys.S)) {
-                    const mult = Input.keyDown(InputKeys.ShiftLeft) ? 5 : 1
-                    z -= tick * mult
-                    graph.z = z
-                }
-                if (Input.keyPress(InputKeys.D)) {
-                    isColor = !isColor
-                }
                 if (Input.onDragY()) {
                     angleX = Input.dragY
                 }
                 if (Input.onDragX()) {
                     angleY = Input.dragX
                 }
-                if (Input.getMouseWheel() != 0) {
-                    angleZ = Input.getMouseWheel() * 20
+                const roda = Input.consumirRoda()
+                if (roda !== 0) {
+                    const proximo = z + roda * passo
+                    if (proximo > 0) {
+                        z = proximo
+                        graph.z = z
+                    }
                 }
             }, 100))
 
             intervalos.push(window.setInterval(() => {
                 graph.update({ angleX, angleZ, angleY })
-                graph.render(mesh, { isPoint, isColor })
+                graph.render(mesh, { isPoint })
             }, 1000 / 45))
         })()
 

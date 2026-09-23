@@ -25,13 +25,13 @@ export const catalogo: readonly EntradaDemo[] = [
         nome: "Demonstração",
         dimensao: "3D",
         legenda: [
-            "Arrastar — girar",
-            "Roda do mouse — girar no outro eixo",
-            "W / S — aproximar e afastar",
+            "A / D — mover para os lados",
+            "W / S — mover para cima e para baixo",
             "Shift — mais rápido",
+            "Roda — aproximar e afastar",
+            "Arrastar — girar",
             "Espaço — trocar a malha",
-            "A — preenchido ou pontos",
-            "D — iluminação",
+            "T — preenchido ou pontos",
         ],
     },
 ]
