@@ -7,6 +7,7 @@ export enum InputKeys {
     Enter = 'Enter',
     Pause = 'Pause',
     ShiftLeft = 'ShiftLeft',
+    ShiftRight = 'ShiftRight',
     ControlLeft = 'ControlLeft',
     Backspace = 'Backspace',
     AltLeft = 'AltLeft',
@@ -21,5 +22,6 @@ export enum InputKeys {
     R = 'KeyR',
     P = 'KeyP',
     T = 'KeyT',
+    I = 'KeyI',
     B = 'KeyB',
 }

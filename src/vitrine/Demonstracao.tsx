@@ -60,33 +60,45 @@ export function DemonstracaoAberta({ onVoltar }: { onVoltar: () => void }) {
             let angleX = 0
             let angleZ = 0
             let angleY = 0
-            let isColor = false
             let isPoint = false
-            let z = 1
+            let iluminado = true
+            let x = 0
+            let y = 0
+            let z = 2
+            const abertura = { x, y, z, angleX, angleY, angleZ }
             const tick = 0.2
             graph.isChanged = true
 
             intervalos.push(window.setInterval(() => {
-                if (Input.keyPress(InputKeys.A)) {
+                const rapido = Input.keyDown(InputKeys.ShiftLeft) || Input.keyDown(InputKeys.ShiftRight)
+                const passo = tick * (rapido ? 5 : 1)
+                if (Input.keyDown(InputKeys.A)) {
+                    x -= passo
+                    graph.x = x
+                }
+                if (Input.keyDown(InputKeys.D)) {
+                    x += passo
+                    graph.x = x
+                }
+                if (Input.keyDown(InputKeys.W)) {
+                    y -= passo
+                    graph.y = y
+                }
+                if (Input.keyDown(InputKeys.S)) {
+                    y += passo
+                    graph.y = y
+                }
+                if (Input.keyPress(InputKeys.T)) {
                     isPoint = !isPoint
+                }
+                if (Input.keyPress(InputKeys.I)) {
+                    iluminado = !iluminado
+                    graph.isChanged = true
                 }
                 if (Input.keyPress(InputKeys.Space)) {
                     index = (index + 1) % forms.length
                     mesh = forms[index]
                     graph.isChanged = true
-                }
-                if (Input.keyDown(InputKeys.W)) {
-                    const mult = Input.keyDown(InputKeys.ShiftLeft) ? 5 : 1
-                    z += tick * mult
-                    graph.z = z
-                }
-                if (Input.keyDown(InputKeys.S)) {
-                    const mult = Input.keyDown(InputKeys.ShiftLeft) ? 5 : 1
-                    z -= tick * mult
-                    graph.z = z
-                }
-                if (Input.keyPress(InputKeys.D)) {
-                    isColor = !isColor
                 }
                 if (Input.onDragY()) {
                     angleX = Input.dragY
@@ -94,14 +106,30 @@ export function DemonstracaoAberta({ onVoltar }: { onVoltar: () => void }) {
                 if (Input.onDragX()) {
                     angleY = Input.dragX
                 }
-                if (Input.getMouseWheel() != 0) {
-                    angleZ = Input.getMouseWheel() * 20
+                const roda = Input.consumirRoda()
+                if (roda !== 0) {
+                    const proximo = z + roda * passo
+                    z = proximo > tick ? proximo : tick
+                    graph.z = z
+                }
+                if (Input.keyPress(InputKeys.R)) {
+                    x = abertura.x
+                    y = abertura.y
+                    z = abertura.z
+                    angleX = abertura.angleX
+                    angleY = abertura.angleY
+                    angleZ = abertura.angleZ
+                    graph.x = x
+                    graph.y = y
+                    graph.z = z
+                    Input.zerarArrasto()
+                    graph.isChanged = true
                 }
             }, 100))
 
             intervalos.push(window.setInterval(() => {
                 graph.update({ angleX, angleZ, angleY })
-                graph.render(mesh, { isPoint, isColor })
+                graph.render(mesh, { isPoint, iluminado })
             }, 1000 / 45))
         })()
 
