@@ -1,16 +1,21 @@
-# Game Engine
+# Game engine
 
+Uma engine para criar jogos 2d e 3d. O desenho é no canvas.
 
-## 2D Game
+## 2D
 
-![breakout](src/public/bo_game.gif)
+- Cena com objetos parados e em movimento
+- Colisão entre retângulo, círculo e ponto
+- Teclado e pausa
+- Jogo: Breakout
 
-------------------------------
+## 3D
 
-## 3D Engine
+- Projeção em perspectiva
+- Rotação e aproximar ou afastar
+- Cubo, pirâmide e arquivos OBJ
+- Face preenchida ou em pontos
+- Luz por face
+- Faces de costas ocultas
 
-![breakout](src/public/3d.gif)
-
-reference: [Code-It-Yourself! 3D Graphics Engine - javidx9](https://www.youtube.com/watch?v=ih20l3pJoeU&list=PLrOv9FMX8xJE8NgepZR1etrsU63fDDGxO&index=24)
-
-------------------------------
+Para ver: `npm install` e `npm run dev`.
