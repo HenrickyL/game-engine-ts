@@ -1,6 +1,6 @@
 export type Dimensao = "2D" | "3D"
 
-export type PecaId = "breakout"
+export type PecaId = "breakout" | "demonstracao"
 
 export type EntradaDemo = {
     id: PecaId
@@ -18,6 +18,20 @@ export const catalogo: readonly EntradaDemo[] = [
             "A / D — mover a raquete",
             "Espaço — soltar a bola",
             "Pause — pausar",
+        ],
+    },
+    {
+        id: "demonstracao",
+        nome: "Demonstração",
+        dimensao: "3D",
+        legenda: [
+            "Arrastar — girar",
+            "Roda do mouse — girar no outro eixo",
+            "W / S — aproximar e afastar",
+            "Shift — mais rápido",
+            "Espaço — trocar a malha",
+            "A — preenchido ou pontos",
+            "D — iluminação",
         ],
     },
 ]

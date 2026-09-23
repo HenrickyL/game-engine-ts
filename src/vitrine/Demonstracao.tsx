@@ -1,0 +1,121 @@
+import { useEffect, useState } from "react"
+import { Graphics } from "../Engine/Graphics"
+import { Input } from "../Engine/Input"
+import { InputKeys } from "../Engine/enums"
+import { Mesh } from "../Engine/3D/Mesh"
+import { Render3d } from "../Engine/3D/Render3d"
+import { Test3d } from "../Engine/3D/Test3d"
+import { Palco } from "./Palco"
+import { catalogo } from "./sessao"
+
+const AVISO = "Não foi possível carregar o objeto."
+
+const OBJETOS = ["/tree.obj", "/sphere.obj", "/Jeep.obj"]
+
+async function carregar(test: Test3d, url: string): Promise<Mesh | null> {
+    try {
+        const resposta = await fetch(url)
+        const tipo = resposta.headers.get("content-type") ?? ""
+        if (!resposta.ok || tipo.includes("text/html")) {
+            return null
+        }
+        const malha = await test.getObj(url)
+        if (malha.triangles.length === 0) {
+            return null
+        }
+        return malha
+    } catch {
+        return null
+    }
+}
+
+export function DemonstracaoAberta({ onVoltar }: { onVoltar: () => void }) {
+    const legenda = catalogo.find((entrada) => entrada.id === "demonstracao")?.legenda ?? []
+    const [aviso, setAviso] = useState<string | undefined>(undefined)
+
+    useEffect(() => {
+        let cancelado = false
+        const intervalos: number[] = []
+        const graphics = new Graphics()
+        const test = new Test3d()
+        const graph = new Render3d(graphics)
+        Input.generate(graphics.canvas)
+
+        const cubo = test.getCube()
+        const piramide = test.getPyramid()
+        graph.render(cubo, {})
+
+        void (async () => {
+            const objetos = await Promise.all(OBJETOS.map((url) => carregar(test, url)))
+            if (cancelado) {
+                return
+            }
+            if (objetos.some((malha) => malha === null)) {
+                setAviso(AVISO)
+            }
+
+            const forms = [cubo, piramide, ...objetos.filter((malha): malha is Mesh => malha !== null)]
+            let index = 0
+            let mesh = forms[index]
+            let angleX = 0
+            let angleZ = 0
+            let angleY = 0
+            let isColor = false
+            let isPoint = false
+            let z = 1
+            const tick = 0.2
+            graph.isChanged = true
+
+            intervalos.push(window.setInterval(() => {
+                if (Input.keyPress(InputKeys.A)) {
+                    isPoint = !isPoint
+                }
+                if (Input.keyPress(InputKeys.Space)) {
+                    index = (index + 1) % forms.length
+                    mesh = forms[index]
+                    graph.isChanged = true
+                }
+                if (Input.keyDown(InputKeys.W)) {
+                    const mult = Input.keyDown(InputKeys.ShiftLeft) ? 5 : 1
+                    z += tick * mult
+                    graph.z = z
+                }
+                if (Input.keyDown(InputKeys.S)) {
+                    const mult = Input.keyDown(InputKeys.ShiftLeft) ? 5 : 1
+                    z -= tick * mult
+                    graph.z = z
+                }
+                if (Input.keyPress(InputKeys.D)) {
+                    isColor = !isColor
+                }
+                if (Input.onDragY()) {
+                    angleX = Input.dragY
+                }
+                if (Input.onDragX()) {
+                    angleY = Input.dragX
+                }
+                if (Input.getMouseWheel() != 0) {
+                    angleZ = Input.getMouseWheel() * 20
+                }
+            }, 100))
+
+            intervalos.push(window.setInterval(() => {
+                graph.update({ angleX, angleZ, angleY })
+                graph.render(mesh, { isPoint, isColor })
+            }, 1000 / 45))
+        })()
+
+        return () => {
+            cancelado = true
+            for (const id of intervalos) {
+                window.clearInterval(id)
+            }
+        }
+    }, [])
+
+    return (
+        <Palco legenda={legenda} onVoltar={onVoltar} aviso={aviso}>
+            <canvas width={800} height={600} />
+        </Palco>
+    )
+}

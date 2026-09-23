@@ -147,3 +147,16 @@ body{
   font-size: 0.85rem;
   line-height: 1.45;
 }
+
+.aviso{
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+  margin: 0;
+  max-width: 16rem;
+  padding: 0.35rem 0.7rem;
+  background: rgba(10, 10, 10, 0.72);
+  color: #f3f3f3;
+  font-size: 0.85rem;
+}

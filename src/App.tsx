@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { Engine } from "./Engine/Engine"
 import { GameTest } from "./Game/GameTest"
+import { DemonstracaoAberta } from "./vitrine/Demonstracao"
+import { Palco } from "./vitrine/Palco"
 import {
     abrir,
     catalogo,
@@ -70,19 +72,9 @@ function BreakoutAberto({ onVoltar }: { onVoltar: () => void }) {
     }, [])
 
     return (
-        <div className="palco-pagina">
-            <div className="palco">
-                <button type="button" className="voltar" onClick={onVoltar}>
-                    Voltar
-                </button>
-                <ul className="legenda">
-                    {legenda.map((linha) => (
-                        <li key={linha}>{linha}</li>
-                    ))}
-                </ul>
-                <canvas width={800} height={600} />
-            </div>
-        </div>
+        <Palco legenda={legenda} onVoltar={onVoltar}>
+            <canvas width={800} height={600} />
+        </Palco>
     )
 }
 
@@ -91,6 +83,10 @@ function App() {
 
     if (sessao.pecaAtiva === "breakout") {
         return <BreakoutAberto onVoltar={() => setSessao(voltar())} />
+    }
+
+    if (sessao.pecaAtiva === "demonstracao") {
+        return <DemonstracaoAberta onVoltar={() => setSessao(voltar())} />
     }
 
     return <TelaVitrine onAbrir={(id) => setSessao(abrir(id))} />

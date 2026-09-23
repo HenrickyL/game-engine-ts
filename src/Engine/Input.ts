@@ -22,6 +22,13 @@ export class Input{
     private static _dragY: number =0
     private static _dragElapse: number = 5
 
+    private onKeyDownBound!: (event: KeyboardEvent) => void
+    private onKeyUpBound!: (event: KeyboardEvent) => void
+    private onMouseMoveBound!: (event: MouseEvent) => void
+    private onMouseDownBound!: (event: MouseEvent) => void
+    private onMouseUpBound!: (event: MouseEvent) => void
+    private onWheelBound!: (event: WheelEvent) => void
+
 
     private constructor(){
         Input._keys = Object.keys(InputKeys).reduce((acc, key) => {
@@ -34,16 +41,32 @@ export class Input{
             return acc;
          }, {} as { [key in InputKeys]: boolean });
 
+        this.onKeyDownBound = (event) => this.onKeyDown(event)
+        this.onKeyUpBound = (event) => this.onKeyUp(event)
+        this.onMouseMoveBound = (event) => this.onMouseMove(event)
+        this.onMouseDownBound = (event) => this.onMouseDown(event)
+        this.onMouseUpBound = (event) => this.onMouseUp(event)
+        this.onWheelBound = (event) => this.onMouseWheel(event)
         this.eventHandle()
     }
 
     private eventHandle(): void{
-        document.addEventListener('keydown', this.onKeyDown.bind(this))
-        document.addEventListener('keyup', this.onKeyUp.bind(this))
-        Input._canvas.addEventListener('mousemove', this.onMouseMove.bind(this))
-        Input._canvas.addEventListener('mousedown', this.onMouseDown.bind(this))
-        document.addEventListener('mouseup', this.onMouseUp.bind(this))
-        Input._canvas.addEventListener('wheel', this.onMouseWheel.bind(this))
+        document.addEventListener('keydown', this.onKeyDownBound)
+        document.addEventListener('keyup', this.onKeyUpBound)
+        document.addEventListener('mouseup', this.onMouseUpBound)
+        this.ligarCanvas(Input._canvas)
+    }
+
+    private ligarCanvas(canvas: HTMLCanvasElement): void{
+        canvas.addEventListener('mousemove', this.onMouseMoveBound)
+        canvas.addEventListener('mousedown', this.onMouseDownBound)
+        canvas.addEventListener('wheel', this.onWheelBound)
+    }
+
+    private desligarCanvas(canvas: HTMLCanvasElement): void{
+        canvas.removeEventListener('mousemove', this.onMouseMoveBound)
+        canvas.removeEventListener('mousedown', this.onMouseDownBound)
+        canvas.removeEventListener('wheel', this.onWheelBound)
     }
     private onKeyDown(event: KeyboardEvent):void{
         const key = event.code as InputKeys;
@@ -144,11 +167,36 @@ export class Input{
     static generate(canvas: HTMLCanvasElement): void{
         if(Input._instance == null){
             Input._canvas = canvas
-            const rect = Input._canvas.getBoundingClientRect()
-            Input._offsetX= rect.left 
-            Input._offsetY= rect.top
+            Input.medirOffset()
             Input._instance = new Input()
+            return
         }
+        if(Input._canvas === canvas){
+            Input.medirOffset()
+            return
+        }
+        Input._instance.desligarCanvas(Input._canvas)
+        Input._canvas = canvas
+        Input.medirOffset()
+        Input._instance.ligarCanvas(canvas)
+        Input.limpar()
+    }
+
+    private static medirOffset(): void{
+        const rect = Input._canvas.getBoundingClientRect()
+        Input._offsetX = rect.left
+        Input._offsetY = rect.top
+    }
+
+    private static limpar(): void{
+        for(const key of Object.keys(Input._keys) as InputKeys[]){
+            Input._keys[key] = false
+            Input._ctrl[key] = false
+        }
+        Input._onMouseClick = false
+        Input._dragX = 0
+        Input._dragY = 0
+        Input._mouseWheel = 0
     }
 
 
